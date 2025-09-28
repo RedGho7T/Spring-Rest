@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: ru.kata.spring.boot_security.demo.SpringBootSecurityDemoApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.282 s - in ru.kata.spring.boot_security.demo.SpringBootSecurityDemoApplicationTests
