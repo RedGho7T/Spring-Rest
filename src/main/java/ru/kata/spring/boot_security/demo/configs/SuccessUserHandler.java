@@ -12,14 +12,29 @@ import java.util.Set;
 
 @Component
 public class SuccessUserHandler implements AuthenticationSuccessHandler {
-    // Spring Security использует объект Authentication, пользователя авторизованной сессии.
+
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
-        Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-        if (roles.contains("ROLE_USER")) {
-            httpServletResponse.sendRedirect("/user");
-        } else {
-            httpServletResponse.sendRedirect("/");
+    public void onAuthenticationSuccess(HttpServletRequest req,
+                                        HttpServletResponse resp,
+                                        Authentication auth) throws IOException {
+        Set<String> roles = AuthorityUtils.authorityListToSet(auth.getAuthorities());
+        System.out.println("🔍 DEBUG: Пользователь вошёл с ролями: " + roles);
+
+        try {
+            if (roles.contains("ROLE_ADMIN")) {
+                System.out.println("✅ Перенаправляем ADMIN на /admin");
+                resp.sendRedirect("/admin");
+            } else if (roles.contains("ROLE_USER")) {
+                System.out.println("✅ Перенаправляем USER на /user");
+                resp.sendRedirect("/user");
+            } else {
+                System.out.println("⚠️ У пользователя нет ролей, направляем на главную");
+                resp.sendRedirect("/");
+            }
+        } catch (Exception e) {
+            System.err.println("❌ ОШИБКА в SuccessUserHandler: " + e.getMessage());
+            e.printStackTrace();
+            resp.sendRedirect("/");
         }
     }
 }
