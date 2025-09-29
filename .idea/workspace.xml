@@ -4,39 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="95aeefee-b607-4e6e-b4d0-8b0418d419ba" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.PVS-Studio/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.PVS-Studio/settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8aa4ce64-74c7-47dc-bb0c-65299745d128.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/8aa4ce64-74c7-47dc-bb0c-65299745d128.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/configs/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/configs/WebSecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/controllers/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/controllers/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/controllers/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/controllers/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/edit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/new.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/new.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/user/user.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/user/user.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/configs/WebSecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/configs/WebSecurityConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/controllers/AdminController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/controllers/AdminController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/controllers/MainController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/controllers/MainController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/model/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/edit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/new.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/new.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/user/user.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/user/user.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/spring-boot_security-demo-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/spring-boot_security-demo-0.0.1-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/spring-boot_security-demo-0.0.1-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/spring-boot_security-demo-0.0.1-SNAPSHOT.jar.original" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-ru.kata.spring.boot_security.demo.SpringBootSecurityDemoApplicationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-ru.kata.spring.boot_security.demo.SpringBootSecurityDemoApplicationTests.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/ru.kata.spring.boot_security.demo.SpringBootSecurityDemoApplicationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/ru.kata.spring.boot_security.demo.SpringBootSecurityDemoApplicationTests.txt" afterDir="false" />
-    </list>
+    <list default="true" id="95aeefee-b607-4e6e-b4d0-8b0418d419ba" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -156,7 +124,7 @@
       <workItem from="1759103778691" duration="41000" />
       <workItem from="1759103889017" duration="81000" />
       <workItem from="1759104474382" duration="3000" />
-      <workItem from="1759106861487" duration="301000" />
+      <workItem from="1759106861487" duration="603000" />
     </task>
     <servers />
   </component>
