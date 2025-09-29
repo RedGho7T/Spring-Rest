@@ -807,34 +807,13 @@ false Zulu
       <ObjectId>13442</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
-    <role id="4" parent="1" name="pg_execute_server_program">
-      <ObjectId>4571</ObjectId>
-    </role>
-    <role id="5" parent="1" name="pg_monitor">
-      <ObjectId>3373</ObjectId>
-      <RoleGrants>3374
-3375
-3377</RoleGrants>
-    </role>
-    <role id="6" parent="1" name="pg_read_all_settings">
-      <ObjectId>3374</ObjectId>
-    </role>
-    <role id="7" parent="1" name="pg_read_all_stats">
-      <ObjectId>3375</ObjectId>
-    </role>
-    <role id="8" parent="1" name="pg_read_server_files">
-      <ObjectId>4569</ObjectId>
-    </role>
-    <role id="9" parent="1" name="pg_signal_backend">
+    <role id="4" parent="1" name="pg_signal_backend">
       <ObjectId>4200</ObjectId>
     </role>
-    <role id="10" parent="1" name="pg_stat_scan_tables">
-      <ObjectId>3377</ObjectId>
+    <role id="5" parent="1" name="pg_read_server_files">
+      <ObjectId>4569</ObjectId>
     </role>
-    <role id="11" parent="1" name="pg_write_server_files">
-      <ObjectId>4570</ObjectId>
-    </role>
-    <role id="12" parent="1" name="postgres">
+    <role id="6" parent="1" name="postgres">
       <BypassRls>1</BypassRls>
       <CanLogin>1</CanLogin>
       <CreateDb>1</CreateDb>
@@ -842,6 +821,27 @@ false Zulu
       <ObjectId>10</ObjectId>
       <Replication>1</Replication>
       <SuperRole>1</SuperRole>
+    </role>
+    <role id="7" parent="1" name="pg_write_server_files">
+      <ObjectId>4570</ObjectId>
+    </role>
+    <role id="8" parent="1" name="pg_execute_server_program">
+      <ObjectId>4571</ObjectId>
+    </role>
+    <role id="9" parent="1" name="pg_read_all_stats">
+      <ObjectId>3375</ObjectId>
+    </role>
+    <role id="10" parent="1" name="pg_monitor">
+      <ObjectId>3373</ObjectId>
+      <RoleGrants>3374
+3375
+3377</RoleGrants>
+    </role>
+    <role id="11" parent="1" name="pg_read_all_settings">
+      <ObjectId>3374</ObjectId>
+    </role>
+    <role id="12" parent="1" name="pg_stat_scan_tables">
+      <ObjectId>3377</ObjectId>
     </role>
     <tablespace id="13" parent="1" name="pg_default">
       <ObjectId>1663</ObjectId>
@@ -4169,7 +4169,7 @@ false Zulu
     <table id="257" parent="253" name="users">
       <DetailsLevel>2</DetailsLevel>
       <ObjectId>16466</ObjectId>
-      <StateNumber>1575</StateNumber>
+      <StateNumber>1591</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
@@ -4263,7 +4263,19 @@ false Zulu
       <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <index id="270" parent="257" name="users_pkey">
+    <column id="270" parent="257" name="first_name">
+      <Position>6</Position>
+      <StateNumber>1591</StateNumber>
+      <StoredType>varchar(255)|0s</StoredType>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="271" parent="257" name="last_name">
+      <Position>7</Position>
+      <StateNumber>1591</StateNumber>
+      <StoredType>varchar(255)|0s</StoredType>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="272" parent="257" name="users_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>16473</ObjectId>
@@ -4272,7 +4284,7 @@ false Zulu
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="271" parent="257" name="uk_6dotkott2kjsp8vw4d0m25fb7">
+    <index id="273" parent="257" name="uk_6dotkott2kjsp8vw4d0m25fb7">
       <ColNames>email</ColNames>
       <ObjectId>16482</ObjectId>
       <StateNumber>1573</StateNumber>
@@ -4282,47 +4294,47 @@ false Zulu
       <CollationIds>100</CollationIds>
       <CollationParentNames>pg_catalog</CollationParentNames>
     </index>
-    <key id="272" parent="257" name="users_pkey">
+    <key id="274" parent="257" name="users_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>16474</ObjectId>
       <Primary>1</Primary>
       <StateNumber>1568</StateNumber>
       <UnderlyingIndexId>16473</UnderlyingIndexId>
     </key>
-    <key id="273" parent="257" name="uk_6dotkott2kjsp8vw4d0m25fb7">
+    <key id="275" parent="257" name="uk_6dotkott2kjsp8vw4d0m25fb7">
       <ObjectId>16483</ObjectId>
       <StateNumber>1573</StateNumber>
       <UnderlyingIndexId>16482</UnderlyingIndexId>
     </key>
-    <column id="274" parent="258" name="user_id">
+    <column id="276" parent="258" name="user_id">
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StateNumber>1569</StateNumber>
       <StoredType>bigint|0s</StoredType>
       <TypeId>20</TypeId>
     </column>
-    <column id="275" parent="258" name="role_id">
+    <column id="277" parent="258" name="role_id">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>1569</StateNumber>
       <StoredType>bigint|0s</StoredType>
       <TypeId>20</TypeId>
     </column>
-    <foreign-key id="276" parent="258" name="fk2o0jvgh89lemvvo17cbqvdxaa">
+    <foreign-key id="278" parent="258" name="fk2o0jvgh89lemvvo17cbqvdxaa">
       <ColNames>user_id</ColNames>
       <ObjectId>16489</ObjectId>
       <StateNumber>1575</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>16466</RefTableId>
     </foreign-key>
-    <foreign-key id="277" parent="258" name="fkj6m8fwv7oqv74fcehir1a9ffy">
+    <foreign-key id="279" parent="258" name="fkj6m8fwv7oqv74fcehir1a9ffy">
       <ColNames>role_id</ColNames>
       <ObjectId>16484</ObjectId>
       <StateNumber>1574</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>16458</RefTableId>
     </foreign-key>
-    <index id="278" parent="258" name="users_roles_pkey">
+    <index id="280" parent="258" name="users_roles_pkey">
       <ColNames>user_id
 role_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
@@ -4332,7 +4344,7 @@ role_id</ColNames>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="279" parent="258" name="users_roles_pkey">
+    <key id="281" parent="258" name="users_roles_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>16479</ObjectId>
       <Primary>1</Primary>

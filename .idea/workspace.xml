@@ -4,7 +4,39 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="95aeefee-b607-4e6e-b4d0-8b0418d419ba" name="Changes" comment="" />
+    <list default="true" id="95aeefee-b607-4e6e-b4d0-8b0418d419ba" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.PVS-Studio/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.PVS-Studio/settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8aa4ce64-74c7-47dc-bb0c-65299745d128.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/8aa4ce64-74c7-47dc-bb0c-65299745d128.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/configs/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/configs/WebSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/controllers/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/controllers/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/controllers/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/controllers/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/new.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/new.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/user/user.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/user/user.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/configs/WebSecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/configs/WebSecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/controllers/AdminController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/controllers/AdminController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/controllers/MainController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/controllers/MainController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/model/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/new.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/new.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/user/user.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/user/user.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/spring-boot_security-demo-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/spring-boot_security-demo-0.0.1-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/spring-boot_security-demo-0.0.1-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/spring-boot_security-demo-0.0.1-SNAPSHOT.jar.original" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-ru.kata.spring.boot_security.demo.SpringBootSecurityDemoApplicationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-ru.kata.spring.boot_security.demo.SpringBootSecurityDemoApplicationTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/ru.kata.spring.boot_security.demo.SpringBootSecurityDemoApplicationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/ru.kata.spring.boot_security.demo.SpringBootSecurityDemoApplicationTests.txt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,12 +60,12 @@
     &quot;assignee&quot;: &quot;RedGho7T&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/RedGho7T/Spring-Boot-Security-.git",
-    "accountId": "c799d4be-d0c8-44a5-b857-10abe1463663"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/RedGho7T/Spring-Boot-Security-.git&quot;,
+    &quot;accountId&quot;: &quot;c799d4be-d0c8-44a5-b857-10abe1463663&quot;
   }
-}]]></component>
+}</component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -67,7 +99,7 @@
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/redgho7t/IdeaProjects/PP_3_1_2_Boot_Security/src/main/java/ru/kata/spring/boot_security/demo&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/redgho7t/IdeaProjects/PP_3_1_3_Bootstrap&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -117,7 +149,14 @@
       <workItem from="1759053077416" duration="972000" />
       <workItem from="1759060871475" duration="1091000" />
       <workItem from="1759064201709" duration="20233000" />
-      <workItem from="1759086243841" duration="3346000" />
+      <workItem from="1759086243841" duration="6308000" />
+      <workItem from="1759093835348" duration="5645000" />
+      <workItem from="1759099644885" duration="6000" />
+      <workItem from="1759099664398" duration="1147000" />
+      <workItem from="1759103778691" duration="41000" />
+      <workItem from="1759103889017" duration="81000" />
+      <workItem from="1759104474382" duration="3000" />
+      <workItem from="1759106861487" duration="301000" />
     </task>
     <servers />
   </component>

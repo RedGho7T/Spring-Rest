@@ -11,7 +11,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.HashSet;
 
 @Controller
 @RequestMapping("/admin")
@@ -55,32 +55,60 @@ public class AdminController {
         }
     }
 
-    // Создание пользователя
+    // ОБНОВЛЕННОЕ создание пользователя с поддержкой firstName/lastName
     @PostMapping
-    public String createUser(@ModelAttribute("user") User user, Model model) {
+    public String createUser(@RequestParam("firstName") String firstName,
+                             @RequestParam("lastName") String lastName,
+                             @RequestParam("age") int age,
+                             @RequestParam("email") String email,
+                             @RequestParam("password") String password,
+                             @RequestParam(value = "roles", required = false) String[] roleIds,
+                             Model model) {
         try {
-            System.out.println("🔄 Создаём пользователя: " + user.getEmail());
+            System.out.println("🔄 Создаём пользователя: " + firstName + " " + lastName);
 
-            // Получаем выбранные роли из формы
-            Set<Long> selectedRoleIds = user.getRoles().stream()
-                    .map(Role::getId)
-                    .collect(Collectors.toSet());
+            // Создаем нового пользователя с новыми полями
+            User user = new User();
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setAge(age);
+            user.setEmail(email);
+            user.setPassword(password);
 
-            // Загружаем полные объекты Role по ID
-            Set<Role> roles = roleService.getAllRoles().stream()
-                    .filter(r -> selectedRoleIds.contains(r.getId()))
-                    .collect(Collectors.toSet());
+            // Обрабатываем роли
+            Set<Role> roles = new HashSet<>();
+            if (roleIds != null && roleIds.length > 0) {
+                for (String roleIdStr : roleIds) {
+                    try {
+                        Long roleId = Long.parseLong(roleIdStr);
+                        Role role = roleService.getAllRoles().stream()
+                                .filter(r -> r.getId().equals(roleId))
+                                .findFirst()
+                                .orElse(null);
+                        if (role != null) {
+                            roles.add(role);
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("⚠️ Неверный ID роли: " + roleIdStr);
+                    }
+                }
+            } else {
+                // По умолчанию назначаем роль USER
+                Role userRole = roleService.getRoleByName("ROLE_USER");
+                if (userRole != null) {
+                    roles.add(userRole);
+                }
+            }
 
             user.setRoles(roles);
-
-            // УПРОЩЕННАЯ ВЕРСИЯ - пароль сохраняется как есть
             userService.saveUser(user);
 
-            System.out.println("✅ Пользователь создан успешно");
+            System.out.println("✅ Пользователь создан успешно: " + user.getFullName());
             return "redirect:/admin";
 
         } catch (Exception e) {
             System.out.println("❌ Ошибка при создании пользователя: " + e.getMessage());
+            e.printStackTrace();
             model.addAttribute("error", "Ошибка при создании пользователя: " + e.getMessage());
             model.addAttribute("allRoles", roleService.getAllRoles());
             return "admin/new";
@@ -100,18 +128,21 @@ public class AdminController {
             model.addAttribute("user", user);
             model.addAttribute("allRoles", roleService.getAllRoles());
             return "admin/edit";
-
         } catch (Exception e) {
             System.out.println("❌ Ошибка при загрузке формы редактирования: " + e.getMessage());
             return "redirect:/admin";
         }
     }
 
-    // ИСПРАВЛЕННЫЙ метод обновления пользователя
+    // ОБНОВЛЕННЫЙ метод обновления пользователя с поддержкой firstName/lastName
     @PostMapping("/{id}")
     public String updateUser(@PathVariable("id") Long id,
-                             @ModelAttribute("user") User user,
-                             @RequestParam(value = "roleIds", required = false) Set<Long> roleIds,
+                             @RequestParam("firstName") String firstName,
+                             @RequestParam("lastName") String lastName,
+                             @RequestParam("age") int age,
+                             @RequestParam("email") String email,
+                             @RequestParam(value = "password", required = false) String password,
+                             @RequestParam(value = "roleIds", required = false) String[] roleIds,
                              Model model) {
         try {
             System.out.println("🔄 Обновляем пользователя с ID: " + id);
@@ -123,36 +154,48 @@ public class AdminController {
                 return "redirect:/admin";
             }
 
-            // Устанавливаем ID
-            user.setId(id);
+            // Обновляем поля
+            existingUser.setId(id);
+            existingUser.setFirstName(firstName);
+            existingUser.setLastName(lastName);
+            existingUser.setAge(age);
+            existingUser.setEmail(email);
 
             // Обрабатываем роли
-            if (roleIds != null && !roleIds.isEmpty()) {
-                Set<Role> roles = roleService.getAllRoles().stream()
-                        .filter(r -> roleIds.contains(r.getId()))
-                        .collect(Collectors.toSet());
-                user.setRoles(roles);
+            Set<Role> roles = new HashSet<>();
+            if (roleIds != null && roleIds.length > 0) {
+                for (String roleIdStr : roleIds) {
+                    try {
+                        Long roleId = Long.parseLong(roleIdStr);
+                        Role role = roleService.getAllRoles().stream()
+                                .filter(r -> r.getId().equals(roleId))
+                                .findFirst()
+                                .orElse(null);
+                        if (role != null) {
+                            roles.add(role);
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("⚠️ Неверный ID роли: " + roleIdStr);
+                    }
+                }
+                existingUser.setRoles(roles);
                 System.out.println("✅ Установлены роли: " + roles.size());
             } else {
                 // Если роли не выбраны, оставляем старые
-                user.setRoles(existingUser.getRoles());
                 System.out.println("⚠️ Роли не изменились");
             }
 
             // Обрабатываем пароль
-            if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
-                // Если пароль пустой, оставляем старый
-                user.setPassword(existingUser.getPassword());
-                System.out.println("⚠️ Пароль не изменился");
-            } else {
-                // УПРОЩЕННАЯ ВЕРСИЯ - сохраняем пароль как есть
+            if (password != null && !password.trim().isEmpty()) {
+                existingUser.setPassword(password);
                 System.out.println("✅ Пароль обновлен");
+            } else {
+                System.out.println("⚠️ Пароль не изменился");
             }
 
             // Сохраняем пользователя
-            userService.updateUser(user);
-            System.out.println("✅ Пользователь обновлен успешно");
-
+            userService.updateUser(existingUser);
+            System.out.println("✅ Пользователь обновлен: " + existingUser.getFullName());
             return "redirect:/admin";
 
         } catch (Exception e) {
