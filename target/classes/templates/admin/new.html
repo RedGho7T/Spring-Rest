@@ -222,13 +222,18 @@
                    name="email"
                    required>
 
-            <label for="password" class="form-label">Password</label>
+            <label for="password" class="form-label">
+                Пароль <span style="color: red;">*</span>
+            </label>
             <input type="password"
                    class="form-control"
                    id="password"
                    name="password"
-                   placeholder="***"
-                   required>
+                   required
+                   minlength="4">
+            <small style="color: #6c757d; font-size: 0.875em; margin-top: 5px; display: block;">
+                🔒 Пароль будет автоматически зашифрован перед сохранением
+            </small>
 
             <label for="role" class="form-label">Role</label>
             <select class="role-select" id="role" name="roles" multiple size="2">

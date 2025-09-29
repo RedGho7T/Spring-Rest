@@ -261,12 +261,15 @@
                                     Безопасность
                                 </h5>
 
-                                <div class="alert alert-info">
+                                <!-- ОБНОВЛЕННЫЙ ALERT С ИНФОРМАЦИЕЙ О ШИФРОВАНИИ -->
+                                <div class="alert alert-info" role="alert">
                                     <i class="bi bi-info-circle-fill"></i>
-                                    <strong>Внимание!</strong> Оставьте поле пароля пустым, если не хотите изменять
-                                    текущий пароль.
+                                    <strong>Важно!</strong>
+                                    Все пароли автоматически шифруются с помощью BCrypt.
+                                    Оставьте поле пустым, если не хотите изменять текущий пароль.
                                 </div>
 
+                                <!-- ОБНОВЛЕННОЕ ПОЛЕ ПАРОЛЯ -->
                                 <div class="mb-3">
                                     <label for="password" class="form-label">
                                         <i class="bi bi-lock"></i> Новый пароль
@@ -275,10 +278,14 @@
                                            class="form-control"
                                            id="password"
                                            name="password"
-                                           placeholder="Введите новый пароль или оставьте пустым">
-                                    <div class="form-text">
-                                        Оставьте пустым, чтобы сохранить текущий пароль
-                                    </div>
+                                           minlength="4"
+                                           placeholder="Оставьте пустым для сохранения текущего пароля">
+
+                                    <!-- ДОБАВЛЕННАЯ ИНФОРМАЦИЯ О БЕЗОПАСНОСТИ -->
+                                    <small class="form-text text-muted">
+                                        <i class="bi bi-shield-fill-check text-success"></i>
+                                        Пароль будет зашифрован с использованием BCrypt (если указан)
+                                    </small>
                                 </div>
                             </div>
 
