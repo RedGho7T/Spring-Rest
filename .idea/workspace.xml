@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="95aeefee-b607-4e6e-b4d0-8b0418d419ba" name="Changes" comment="" />
+    <list default="true" id="95aeefee-b607-4e6e-b4d0-8b0418d419ba" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,12 +30,12 @@
     &quot;assignee&quot;: &quot;RedGho7T&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/RedGho7T/Spring-Boot-Security-.git&quot;,
-    &quot;accountId&quot;: &quot;c799d4be-d0c8-44a5-b857-10abe1463663&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/RedGho7T/Spring-Bootstrap.git",
+    "accountId": "c799d4be-d0c8-44a5-b857-10abe1463663"
   }
-}</component>
+}]]></component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -124,7 +126,7 @@
       <workItem from="1759103778691" duration="41000" />
       <workItem from="1759103889017" duration="81000" />
       <workItem from="1759104474382" duration="3000" />
-      <workItem from="1759106861487" duration="603000" />
+      <workItem from="1759106861487" duration="1458000" />
     </task>
     <servers />
   </component>
