@@ -10,6 +10,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
         }
+
         .top-bar {
             background-color: #343a40;
             color: white;
@@ -18,18 +19,22 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .user-info {
             font-size: 14px;
         }
+
         .logout-link {
             color: #adb5bd;
             text-decoration: none;
             font-size: 14px;
         }
+
         .logout-link:hover {
             color: white;
             text-decoration: underline;
         }
+
         .sidebar {
             background-color: #f8f9fa;
             width: 250px;
@@ -37,9 +42,11 @@
             float: left;
             border-right: 1px solid #dee2e6;
         }
+
         .sidebar .nav-item {
             width: 100%;
         }
+
         .sidebar .nav-link {
             color: white;
             background-color: #007bff;
@@ -49,33 +56,40 @@
             text-decoration: none;
             display: block;
         }
+
         .sidebar .nav-link.active {
             background-color: #0056b3;
         }
+
         .main-content {
             margin-left: 250px;
             padding: 30px;
         }
+
         .content-header {
             font-size: 24px;
             margin-bottom: 20px;
             color: #495057;
         }
+
         .user-table {
             background: white;
             border: 1px solid #dee2e6;
             border-radius: 4px;
         }
+
         .table th {
             background-color: #f8f9fa;
             border-bottom: 2px solid #dee2e6;
             padding: 12px;
             font-weight: bold;
         }
+
         .table td {
             padding: 12px;
             border-bottom: 1px solid #dee2e6;
         }
+
         .section-title {
             font-size: 18px;
             margin-bottom: 15px;
@@ -93,7 +107,8 @@
             </span>
     </div>
     <form th:action="@{/logout}" method="post" style="margin: 0;">
-        <input type="submit" value="Logout" class="logout-link" style="background: none; border: none; cursor: pointer;">
+        <input type="submit" value="Logout" class="logout-link"
+               style="background: none; border: none; cursor: pointer;">
     </form>
 </div>
 
@@ -129,7 +144,6 @@
             <tbody>
             <tr th:if="${user}">
                 <td th:text="${user.id}">3</td>
-                <!-- ОБНОВЛЕНО: отображаем firstName и lastName отдельно -->
                 <td th:text="${user.firstName}">user</td>
                 <td th:text="${user.lastName}">user</td>
                 <td th:text="${user.age}">30</td>
