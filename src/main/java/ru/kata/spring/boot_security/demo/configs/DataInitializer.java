@@ -26,11 +26,11 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        System.out.println("🚀 Инициализация данных (БЕЗ ШИФРОВАНИЯ)...");
+        System.out.println("Инициализация данных");
 
         // Создаём роли
         Role adminRole = createRoleIfNotExists("ROLE_ADMIN");
-        Role userRole  = createRoleIfNotExists("ROLE_USER");
+        Role userRole = createRoleIfNotExists("ROLE_USER");
 
         // Администратор
         if (!userDao.existsByEmail("admin@admin.com")) {
@@ -48,7 +48,7 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("✅ Создан пользователь: user@user.com / user");
         }
 
-        // Тестовый пользователь (опционально)
+        // Тестовый пользователь
         if (!userDao.existsByEmail("test@test.com")) {
             User test = new User("Тестовый пользователь", 28, "test@test.com", "test");
             test.setRoles(Set.of(userRole));

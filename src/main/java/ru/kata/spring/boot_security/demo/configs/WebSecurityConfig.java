@@ -34,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // доступ к CRUD (админ)
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 // личная страница (пользователь и админ)
-                .antMatchers("/user", "/user/**").hasAnyRole("USER","ADMIN")
+                .antMatchers("/user", "/user/**").hasAnyRole("USER", "ADMIN")
                 // все остальные запросы требуют аутентификации
                 .anyRequest().authenticated()
                 .and()
@@ -51,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/")
                 .permitAll()
                 .and()
-                .csrf().disable(); // отключили CSRF для упрощения
+                .csrf().disable();
     }
 
     @Override
@@ -60,10 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder());
     }
 
-    // ИСПРАВЛЕНО: Убрано шифрование паролей для упрощения
     @Bean
     public PasswordEncoder passwordEncoder() {
-        System.out.println("⚠️ ВНИМАНИЕ: Используется NoOpPasswordEncoder - НЕ ДЛЯ ПРОДАКШЕНА!");
-        return NoOpPasswordEncoder.getInstance(); // НЕ ИСПОЛЬЗУЙТЕ В ПРОДАКШЕНЕ!
+        return NoOpPasswordEncoder.getInstance();
     }
 }

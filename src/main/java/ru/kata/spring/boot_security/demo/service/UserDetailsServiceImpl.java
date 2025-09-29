@@ -31,12 +31,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             System.out.println("✅ Найден пользователь: " + user.getName());
             System.out.println("✅ Роли: " + user.getRoles().size());
 
-            // Выводим роли для отладки
             user.getRoles().forEach(role -> {
                 System.out.println("  - Роль: " + role.getName());
             });
 
-            return user; // Возвращаем пользователя как UserDetails
+            return user;
 
         } catch (Exception e) {
             System.out.println("❌ ОШИБКА при поиске пользователя: " + e.getMessage());

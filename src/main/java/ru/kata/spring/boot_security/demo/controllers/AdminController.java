@@ -26,7 +26,6 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    // Список пользователей
     @GetMapping
     public String listUsers(Model model) {
         try {
@@ -41,7 +40,6 @@ public class AdminController {
         }
     }
 
-    // Форма создания пользователя
     @GetMapping("/new")
     public String newUserForm(Model model) {
         try {
@@ -55,7 +53,6 @@ public class AdminController {
         }
     }
 
-    // ОБНОВЛЕННОЕ создание пользователя с поддержкой firstName/lastName
     @PostMapping
     public String createUser(@RequestParam("firstName") String firstName,
                              @RequestParam("lastName") String lastName,
@@ -67,7 +64,6 @@ public class AdminController {
         try {
             System.out.println("🔄 Создаём пользователя: " + firstName + " " + lastName);
 
-            // Создаем нового пользователя с новыми полями
             User user = new User();
             user.setFirstName(firstName);
             user.setLastName(lastName);
@@ -75,7 +71,6 @@ public class AdminController {
             user.setEmail(email);
             user.setPassword(password);
 
-            // Обрабатываем роли
             Set<Role> roles = new HashSet<>();
             if (roleIds != null && roleIds.length > 0) {
                 for (String roleIdStr : roleIds) {
@@ -115,7 +110,6 @@ public class AdminController {
         }
     }
 
-    // Форма редактирования пользователя
     @GetMapping("/{id}/edit")
     public String editUserForm(@PathVariable("id") Long id, Model model) {
         try {
@@ -134,7 +128,6 @@ public class AdminController {
         }
     }
 
-    // ОБНОВЛЕННЫЙ метод обновления пользователя с поддержкой firstName/lastName
     @PostMapping("/{id}")
     public String updateUser(@PathVariable("id") Long id,
                              @RequestParam("firstName") String firstName,
@@ -154,14 +147,12 @@ public class AdminController {
                 return "redirect:/admin";
             }
 
-            // Обновляем поля
             existingUser.setId(id);
             existingUser.setFirstName(firstName);
             existingUser.setLastName(lastName);
             existingUser.setAge(age);
             existingUser.setEmail(email);
 
-            // Обрабатываем роли
             Set<Role> roles = new HashSet<>();
             if (roleIds != null && roleIds.length > 0) {
                 for (String roleIdStr : roleIds) {
@@ -181,11 +172,9 @@ public class AdminController {
                 existingUser.setRoles(roles);
                 System.out.println("✅ Установлены роли: " + roles.size());
             } else {
-                // Если роли не выбраны, оставляем старые
                 System.out.println("⚠️ Роли не изменились");
             }
 
-            // Обрабатываем пароль
             if (password != null && !password.trim().isEmpty()) {
                 existingUser.setPassword(password);
                 System.out.println("✅ Пароль обновлен");
@@ -193,7 +182,6 @@ public class AdminController {
                 System.out.println("⚠️ Пароль не изменился");
             }
 
-            // Сохраняем пользователя
             userService.updateUser(existingUser);
             System.out.println("✅ Пользователь обновлен: " + existingUser.getFullName());
             return "redirect:/admin";
@@ -207,7 +195,6 @@ public class AdminController {
         }
     }
 
-    // Удаление пользователя
     @PostMapping("/{id}/delete")
     public String deleteUser(@PathVariable("id") Long id) {
         try {

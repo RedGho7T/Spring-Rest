@@ -10,6 +10,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
         }
+
         .top-bar {
             background-color: #343a40;
             color: white;
@@ -18,18 +19,22 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .user-info {
             font-size: 14px;
         }
+
         .logout-link {
             color: #adb5bd;
             text-decoration: none;
             font-size: 14px;
         }
+
         .logout-link:hover {
             color: white;
             text-decoration: underline;
         }
+
         .sidebar {
             background-color: #f8f9fa;
             width: 250px;
@@ -38,6 +43,7 @@
             border-right: 1px solid #dee2e6;
             padding-top: 10px;
         }
+
         .sidebar .nav-link {
             color: white;
             background-color: #007bff;
@@ -47,36 +53,44 @@
             text-decoration: none;
             display: block;
         }
+
         .sidebar .nav-link.active {
             background-color: #0056b3;
         }
+
         .sidebar .nav-link:hover {
             background-color: #0056b3;
             color: white;
         }
+
         .main-content {
             margin-left: 250px;
             padding: 30px;
         }
+
         .content-header {
             font-size: 24px;
             margin-bottom: 20px;
             color: #495057;
         }
+
         .nav-tabs {
             border-bottom: 1px solid #dee2e6;
             margin-bottom: 20px;
         }
+
         .nav-tabs .nav-link {
             color: #007bff;
             border: none;
             padding: 10px 20px;
         }
+
         .nav-tabs .nav-link.active {
             color: #495057;
             background-color: #fff;
             border-bottom: 2px solid #007bff;
         }
+
         .form-container {
             background: white;
             border: 1px solid #dee2e6;
@@ -84,6 +98,7 @@
             padding: 30px;
             max-width: 600px;
         }
+
         .form-label {
             font-weight: bold;
             color: #495057;
@@ -91,6 +106,7 @@
             margin-bottom: 5px;
             text-align: center;
         }
+
         .form-control {
             margin-bottom: 20px;
             padding: 8px 12px;
@@ -98,10 +114,12 @@
             border-radius: 4px;
             width: 100%;
         }
+
         .form-control.error {
             background-color: #fff3cd;
             border-color: #ffeaa7;
         }
+
         .btn-success {
             background-color: #28a745;
             border-color: #28a745;
@@ -112,17 +130,20 @@
             width: 100%;
             margin-top: 10px;
         }
+
         .section-title {
             font-size: 18px;
             margin-bottom: 15px;
             color: #495057;
         }
+
         .role-select {
             border: 1px solid #ced4da;
             border-radius: 4px;
             padding: 8px 12px;
             width: 100%;
         }
+
         .role-option {
             padding: 5px;
         }
@@ -131,11 +152,13 @@
 <body>
 <!-- Top navigation bar -->
 <div class="top-bar">
-    <div class="user-info" th:if="${#authentication != null and #authentication.principal != null and #authentication.principal.username != null}">
+    <div class="user-info"
+         th:if="${#authentication != null and #authentication.principal != null and #authentication.principal.username != null}">
         <span th:text="${#authentication.principal.username}">admin@mail.ru</span> with roles: ADMIN USER
     </div>
     <form th:action="@{/logout}" method="post" style="margin: 0;">
-        <input type="submit" value="Logout" class="logout-link" style="background: none; border: none; cursor: pointer;">
+        <input type="submit" value="Logout" class="logout-link"
+               style="background: none; border: none; cursor: pointer;">
     </form>
 </div>
 
@@ -171,7 +194,6 @@
     <div class="form-container">
         <form th:action="@{/admin}" method="post">
 
-            <!-- ОБНОВЛЕНО: отдельные поля для firstName и lastName -->
             <label for="firstName" class="form-label">First name</label>
             <input type="text"
                    class="form-control"
@@ -211,7 +233,8 @@
             <label for="role" class="form-label">Role</label>
             <select class="role-select" id="role" name="roles" multiple size="2">
                 <option value="1" class="role-option" style="background-color: #e3f2fd;">ADMIN</option>
-                <option value="2" class="role-option" style="background-color: #007bff; color: white;" selected>USER</option>
+                <option value="2" class="role-option" style="background-color: #007bff; color: white;" selected>USER
+                </option>
             </select>
 
             <button type="submit" class="btn btn-success">Add new user</button>
@@ -221,11 +244,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Add validation feedback
-    document.addEventListener('DOMContentLoaded', function() {
+
+    document.addEventListener('DOMContentLoaded', function () {
         const inputs = document.querySelectorAll('.form-control');
         inputs.forEach(input => {
-            input.addEventListener('blur', function() {
+            input.addEventListener('blur', function () {
                 if (this.hasAttribute('required') && !this.value.trim()) {
                     this.classList.add('error');
                 } else {
@@ -234,9 +257,8 @@
             });
         });
 
-        // Form validation
         const form = document.querySelector('form');
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', function (e) {
             let valid = true;
 
             // Validate required fields
@@ -251,14 +273,12 @@
                 }
             });
 
-            // Validate age
             const age = document.getElementById('age').value;
             if (age < 1 || age > 150) {
                 document.getElementById('age').classList.add('error');
                 valid = false;
             }
 
-            // Validate email
             const email = document.getElementById('email').value;
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {

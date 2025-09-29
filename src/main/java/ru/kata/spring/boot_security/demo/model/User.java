@@ -16,14 +16,12 @@ public class User implements UserDetails {
     @Column(name = "id")
     private Long id;
 
-    // НОВЫЕ ПОЛЯ
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    // СТАРОЕ ПОЛЕ - сохраняем для совместимости
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -36,7 +34,6 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    // Связь Many-to-Many с ролями
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
@@ -45,10 +42,9 @@ public class User implements UserDetails {
     )
     private Set<Role> roles;
 
-    // Конструкторы
-    public User() {}
+    public User() {
+    }
 
-    // Старый конструктор - для совместимости
     public User(String name, int age, String email, String password) {
         String[] nameParts = name.split(" ", 2);
         this.firstName = nameParts[0];
@@ -59,7 +55,6 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    // Новый конструктор с отдельными именем и фамилией
     public User(String firstName, String lastName, int age, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -69,7 +64,6 @@ public class User implements UserDetails {
         updateFullName();
     }
 
-    // Геттеры и сеттеры
     public Long getId() {
         return id;
     }
@@ -78,7 +72,6 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    // НОВЫЕ геттеры/сеттеры
     public String getFirstName() {
         return firstName;
     }
@@ -97,14 +90,12 @@ public class User implements UserDetails {
         updateFullName();
     }
 
-    // СТАРЫЕ геттеры/сеттеры - для совместимости
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-        // При установке name пытаемся разделить на firstName и lastName
         if (firstName == null || lastName == null) {
             String[] nameParts = name.split(" ", 2);
             if (firstName == null) {
@@ -144,14 +135,12 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    // Метод для автоматического формирования полного имени
     public void updateFullName() {
         if (firstName != null && lastName != null) {
             this.name = firstName + " " + lastName;
         }
     }
 
-    // Вспомогательные методы
     public String getFullName() {
         if (firstName != null && lastName != null) {
             return firstName + " " + lastName;
@@ -159,7 +148,6 @@ public class User implements UserDetails {
         return name != null ? name : "";
     }
 
-    // УПРОЩЕННАЯ РЕАЛИЗАЦИЯ UserDetails - без шифрования паролей
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles; // Роли реализуют GrantedAuthority
@@ -167,15 +155,14 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password; // Возвращаем пароль как есть
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return email; // Используем email как имя пользователя
+        return email;
     }
 
-    // Все методы возвращают true - пользователь активен
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -196,7 +183,6 @@ public class User implements UserDetails {
         return true;
     }
 
-    // Методы для JPA callbacks
     @PrePersist
     @PreUpdate
     public void prePersistOrUpdate() {
