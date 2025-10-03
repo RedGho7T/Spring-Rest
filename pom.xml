@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ru.kata</groupId>
-    <artifactId>spring-bootstrap</artifactId>
+    <artifactId>spring-rest</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring-boot_security-bootstrap</name>
-    <description>Spring-Bootstrap</description>
+    <name>spring-boot_security-rest</name>
+    <description>Spring-Rest</description>
     <properties>
         <java.version>17</java.version>
     </properties>

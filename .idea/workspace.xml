@@ -126,20 +126,20 @@
       <module name="spring-boot_security-demo" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ru.kata.spring.boot_security.demo.*" />
+          <option name="PATTERN" value="ru.redgho7t.spring.rest.demo.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="ru.kata.spring.boot_security.demo" />
-      <option name="MAIN_CLASS_NAME" value="ru.kata.spring.boot_security.demo.SpringBootSecurityDemoApplicationTests" />
+      <option name="MAIN_CLASS_NAME" value="ru.redgho7t.spring.rest.demo.SpringBootSecurityDemoApplicationTests" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="SpringBootSecurityDemoApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="spring-boot_security-demo" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="ru.kata.spring.boot_security.demo.SpringBootSecurityDemoApplication" />
+      <module name="spring-bootstrap" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="ru.redgho7t.spring.rest.demo.SpringBootSecurityDemoApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
