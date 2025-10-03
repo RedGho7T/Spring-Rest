@@ -1,73 +1,91 @@
 package ru.kata.spring.boot_security.demo.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.RoleDao;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.service.PasswordService;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
 
+    private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
+
     private final UserDao userDao;
     private final RoleDao roleDao;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordService passwordService;
 
     @Autowired
-    public DataInitializer(UserDao userDao, RoleDao roleDao, PasswordEncoder passwordEncoder) {
+    public DataInitializer(UserDao userDao, RoleDao roleDao, @Lazy PasswordService passwordService) {
         this.userDao = userDao;
         this.roleDao = roleDao;
-        this.passwordEncoder = passwordEncoder;
+        this.passwordService = passwordService;
+        logger.info("DataInitializer initialized with PasswordService");
     }
 
     @Override
     @Transactional
     public void run(String... args) {
-        System.out.println("Инициализация данных");
+        logger.info("Starting data initialization");
 
-        // Создаём роли
+        if (!passwordService.isPasswordCacheInitialized()) {
+            logger.error("Password cache is not ready");
+            throw new IllegalStateException("Password cache not initialized");
+        }
+        logger.info("Password cache ready: {} entries", passwordService.getCachedPasswordCount());
+
+
         Role adminRole = createRoleIfNotExists("ROLE_ADMIN");
         Role userRole = createRoleIfNotExists("ROLE_USER");
 
-        // Администратор
+
         if (!userDao.existsByEmail("admin@admin.com")) {
-            User admin = new User("Администратор", 30, "admin@admin.com",  passwordEncoder.encode("admin"));
+            String adminPass = passwordService.getEncodedAdminPassword();
+            User admin = new User("Администратор", 30, "admin@admin.com", adminPass);
             admin.setRoles(Set.of(adminRole));
             userDao.save(admin);
-            System.out.println("✅ Создан администратор: admin@admin.com / admin");
+            logger.info("Created admin with cached password");
         }
 
-        // Обычный пользователь
+
         if (!userDao.existsByEmail("user@user.com")) {
-            User user = new User("Обычный пользователь", 25, "user@user.com", passwordEncoder.encode("user"));
+            String userPass = passwordService.getEncodedUserPassword();
+            User user = new User("Обычный пользователь", 25, "user@user.com", userPass);
             user.setRoles(Set.of(userRole));
             userDao.save(user);
-            System.out.println("✅ Создан пользователь: user@user.com / user");
+            logger.info("Created user with cached password");
         }
 
-        // Тестовый пользователь
+
         if (!userDao.existsByEmail("test@test.com")) {
-            User test = new User("Тестовый пользователь", 28, "test@test.com", passwordEncoder.encode("test"));
+            String testPass = passwordService.getEncodedTestPassword();
+            User test = new User("Тестовый пользователь", 28, "test@test.com", testPass);
             test.setRoles(Set.of(userRole));
             userDao.save(test);
-            System.out.println("✅ Создан тестовый пользователь: test@test.com / test");
+            logger.info("Created test user with cached password");
         }
     }
 
     private Role createRoleIfNotExists(String roleName) {
-        try {
-            return roleDao.findByName(roleName);
-        } catch (Exception e) {
-            Role role = new Role(roleName);
-            roleDao.save(role);
-            System.out.println("✅ Создана роль: " + roleName);
-            return role;
+        Optional<Role> existing = roleDao.findByName(roleName);
+        if (existing.isPresent()) {
+            logger.debug("Role {} already exists", roleName);
+            return existing.get();
         }
+
+        Role role = new Role(roleName);
+        roleDao.save(role);
+        logger.info("Created role: {}", roleName);
+        return role;
     }
 }

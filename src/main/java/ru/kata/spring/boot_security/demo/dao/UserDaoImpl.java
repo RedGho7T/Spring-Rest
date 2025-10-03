@@ -1,103 +1,94 @@
 package ru.kata.spring.boot_security.demo.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserDaoImpl implements UserDao {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     public List<User> findAll() {
-        return entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
+        logger.debug("Fetching all users from database");
+        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u", User.class);
+        return query.getResultList();
     }
 
     @Override
-    public User findById(Long id) {
-        return entityManager.find(User.class, id);
+    public Optional<User> findById(Long id) {
+        logger.debug("Searching for user by ID: {}", id);
+        User user = entityManager.find(User.class, id);
+        return Optional.ofNullable(user);
     }
 
     @Override
     public void save(User user) {
+        logger.debug("Saving user: {}", user.getEmail());
         entityManager.persist(user);
+        logger.debug("User {} saved successfully", user.getEmail());
     }
 
     @Override
     public void update(User user) {
+        logger.debug("Updating user: {}", user.getEmail());
         entityManager.merge(user);
-    }
-
-    @Override
-    public void delete(Long id) {
-        User user = findById(id);
-        if (user != null) {
-            entityManager.remove(user);
-        }
+        logger.debug("User {} updated successfully", user.getEmail());
     }
 
     @Override
     public void deleteById(Long id) {
-        delete(id);
-    }
-
-    @Override
-    public List<User> findByNameContaining(String name) {
-        return entityManager.createQuery("SELECT u FROM User u WHERE u.name LIKE :name", User.class)
-                .setParameter("name", "%" + name + "%")
-                .getResultList();
+        logger.debug("Deleting user with ID: {}", id);
+        User user = entityManager.find(User.class, id);
+        if (user != null) {
+            entityManager.remove(user);
+            logger.debug("User with ID {} deleted successfully", id);
+        } else {
+            logger.warn("User with ID {} not found for deletion", id);
+        }
     }
 
     @Override
     public boolean existsByEmail(String email) {
+        logger.debug("Checking existence of email: {}", email);
         try {
             Long count = entityManager.createQuery("SELECT COUNT(u) FROM User u WHERE u.email = :email", Long.class)
                     .setParameter("email", email)
                     .getSingleResult();
-            return count > 0;
+            boolean exists = count > 0;
+            logger.debug("Email {} exists: {}", email, exists);
+            return exists;
         } catch (Exception e) {
-            System.err.println("❌ Ошибка при проверке существования email: " + e.getMessage());
+            logger.error("Error checking email existence for {}: {}", email, e.getMessage());
             return false;
         }
     }
 
     @Override
-    public User findByEmail(String email) {
-        System.out.println("🔍 UserDaoImpl: Ищем пользователя с email: " + email);
-
+    public Optional<User> findByEmail(String email) {
+        logger.debug("Searching for user by email: {}", email);
         try {
-            User user = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+            User user = entityManager
+                    .createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
                     .setParameter("email", email)
                     .getSingleResult();
-
-            System.out.println("✅ UserDaoImpl: Найден пользователь: " + user.getName());
-            return user;
-
+            logger.debug("User found by email: {}", email);
+            return Optional.of(user);
         } catch (NoResultException e) {
-            System.err.println("❌ UserDaoImpl: Пользователь с email '" + email + "' НЕ НАЙДЕН");
-            return null;
-        } catch (Exception e) {
-            System.err.println("❌ UserDaoImpl: Ошибка при поиске: " + e.getMessage());
-            return null;
-        }
-
-    }
-
-    @Override
-    public User getByEmail(String email) {
-        try {
-            return entityManager.createQuery(
-                            "SELECT u FROM User u WHERE u.email = :email", User.class)
-                    .setParameter("email", email)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
+            logger.debug("No user found with email: {}", email);
+            return Optional.empty();
         }
     }
 }
