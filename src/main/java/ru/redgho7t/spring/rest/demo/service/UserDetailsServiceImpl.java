@@ -16,7 +16,6 @@ import java.util.Optional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
-
     private final UserService userService;
 
     @Autowired
@@ -30,30 +29,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         logger.debug("Attempting login for email: {}", email);
 
-        try {
-            Optional<User> userOptional = userService.findByEmail(email);
-
-            if (userOptional.isEmpty()) {
-                logger.warn("User not found: {}", email);
-                throw new UsernameNotFoundException("User with email '" + email + "' not found");
-            }
-
-            User user = userOptional.get();
-            logger.debug("User found: {} with {} roles", user.getEmail(), user.getRoles().size());
-
-            if (logger.isDebugEnabled()) {
-                user.getRoles().forEach(role ->
-                        logger.debug("User {} has role: {}", user.getEmail(), role.getName())
-                );
-            }
-
-            return user;
-
-        } catch (UsernameNotFoundException e) {
-            throw e;
-        } catch (Exception e) {
-            logger.error("Error loading user by email {}: {}", email, e.getMessage());
-            throw new UsernameNotFoundException("Error loading user: " + email, e);
+        Optional<User> userOptional = userService.getUserByEmail(email);
+        if (userOptional.isEmpty()) {
+            logger.warn("User not found: {}", email);
+            throw new UsernameNotFoundException("User with email '" + email + "' not found");
         }
+
+        User user = userOptional.get();
+        logger.debug("User found: {} with {} roles", user.getEmail(), user.getRoles().size());
+
+        if (logger.isDebugEnabled()) {
+            user.getRoles().forEach(role -> logger.debug("User {} has role: {}", user.getEmail(), role.getName()));
+        }
+
+        return user;
     }
 }

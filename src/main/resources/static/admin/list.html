@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - All Users</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-light: #3b82f6;
+            --secondary-color: #f8faff;
+            --accent-color: #1e40af;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --white: #ffffff;
+            --success-color: #16a34a;
+            --danger-color: #dc2626;
+            --warning-color: #f59e0b;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            --shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: var(--gradient);
+            box-shadow: var(--shadow);
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .page-header {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .stat-icon.users {
+            background: var(--gradient);
+        }
+
+        .stat-icon.admins {
+            background: linear-gradient(135deg, var(--success-color), #22c55e);
+        }
+
+        .stat-icon.active {
+            background: linear-gradient(135deg, var(--warning-color), #fbbf24);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .table-container {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(to right, #fafbff, #f1f5f9);
+        }
+
+        .table {
+            margin: 0;
+        }
+
+        .table thead th {
+            background: var(--secondary-color);
+            border: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            padding: 1rem;
+        }
+
+        .table tbody td {
+            padding: 1rem;
+            border-color: var(--border-color);
+            vertical-align: middle;
+        }
+
+        .btn-action {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            margin: 0 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            background: var(--danger-color);
+            border: 1px solid var(--danger-color);
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #b91c1c;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-add {
+            background: var(--gradient);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .role-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .role-admin {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .role-user {
+            background: #dbeafe;
+            color: var(--primary-color);
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .loading-spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .error-state {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .table-responsive {
+                border-radius: 16px;
+            }
+
+            .btn-action {
+                padding: 0.25rem 0.75rem;
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand text-white fw-bold" href="/">
+            <i class="fas fa-users-cog me-2"></i>Admin Panel
+        </a>
+        <div class="ms-auto">
+            <a href="/user/user.html" class="btn btn-outline-light btn-sm me-2">
+                <i class="fas fa-user me-1"></i>Profile
+            </a>
+            <a href="/logout" class="btn btn-outline-light btn-sm">
+                <i class="fas fa-sign-out-alt me-1"></i>Logout
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="main-container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="mb-2">User Management</h1>
+                <p class="text-muted mb-0">Manage all users in the system</p>
+            </div>
+            <button class="btn btn-add" onclick="openAddModal()">
+                <i class="fas fa-plus me-2"></i>Add New User
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-row" id="statsRow">
+        <div class="stat-card">
+            <div class="stat-icon users">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-number" id="totalUsers">-</div>
+            <div class="stat-label">Total Users</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon admins">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <div class="stat-number" id="totalAdmins">-</div>
+            <div class="stat-label">Administrators</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon active">
+                <i class="fas fa-user-check"></i>
+            </div>
+            <div class="stat-number" id="activeUsers">-</div>
+            <div class="stat-label">Active Users</div>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="table-container">
+        <div class="loading-state">
+            <div class="loading-spinner"></div>
+            <h5>Loading users...</h5>
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorState" class="error-state" style="display: none;">
+        <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+        <h4>Error Loading Users</h4>
+        <p id="errorMessage">Unable to load user data. Please try again.</p>
+        <button class="btn btn-add" onclick="loadUsers()">
+            <i class="fas fa-redo me-2"></i>Retry
+        </button>
+    </div>
+
+    <!-- Users Table -->
+    <div id="usersTable" class="table-container" style="display: none;">
+        <div class="table-header">
+            <h4 class="mb-0">All Users</h4>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Age</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let allUsers = [];
+
+    // Load users on page load
+    document.addEventListener('DOMContentLoaded', loadUsers);
+
+    async function loadUsers() {
+        try {
+            showLoading();
+
+            const response = await fetch('/api/admin/users', {
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            allUsers = await response.json();
+
+            updateStats();
+            displayUsers(allUsers);
+            showTable();
+
+        } catch (error) {
+            console.error('Error loading users:', error);
+            showError('Failed to load users: ' + error.message);
+        }
+    }
+
+    function updateStats() {
+        const totalUsers = allUsers.length;
+        const totalAdmins = allUsers.filter(user =>
+            user.roles && user.roles.some(role => role.name === 'ROLE_ADMIN')
+        ).length;
+        const activeUsers = totalUsers; // Assuming all users are active
+
+        document.getElementById('totalUsers').textContent = totalUsers;
+        document.getElementById('totalAdmins').textContent = totalAdmins;
+        document.getElementById('activeUsers').textContent = activeUsers;
+    }
+
+    function displayUsers(users) {
+        const tbody = document.getElementById('usersTableBody');
+        tbody.innerHTML = '';
+
+        users.forEach(user => {
+            const row = document.createElement('tr');
+
+            const roles = user.roles || [];
+            const roleNames = roles.map(role => role.name.replace('ROLE_', ''));
+            const isAdmin = roles.some(role => role.name === 'ROLE_ADMIN');
+
+            row.innerHTML = `
+                <td><strong>#${user.id}</strong></td>
+                <td>
+                    <div>
+                        <strong>${user.firstName || ''} ${user.lastName || ''}</strong>
+                    </div>
+                </td>
+                <td>${user.email}</td>
+                <td>${user.age || '-'}</td>
+                <td>
+                    <span class="role-badge ${isAdmin ? 'role-admin' : 'role-user'}">
+                        ${roleNames.join(', ') || 'USER'}
+                    </span>
+                </td>
+                <td>
+                    <button class="btn btn-action btn-edit" onclick="editUser(${user.id})">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="btn btn-action btn-delete" onclick="deleteUser(${user.id})">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </td>
+            `;
+
+            tbody.appendChild(row);
+        });
+    }
+
+    function showLoading() {
+        document.getElementById('loadingState').style.display = 'block';
+        document.getElementById('errorState').style.display = 'none';
+        document.getElementById('usersTable').style.display = 'none';
+    }
+
+    function showError(message) {
+        document.getElementById('errorMessage').textContent = message;
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('errorState').style.display = 'block';
+        document.getElementById('usersTable').style.display = 'none';
+    }
+
+    function showTable() {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('errorState').style.display = 'none';
+        document.getElementById('usersTable').style.display = 'block';
+    }
+
+    function openAddModal() {
+        window.location.href = '/admin/new.html';
+    }
+
+    function editUser(userId) {
+        window.location.href = `/admin/edit.html?id=${userId}`;
+    }
+
+    async function deleteUser(userId) {
+        const user = allUsers.find(u => u.id === userId);
+        if (!user) return;
+
+        const confirmDelete = confirm(
+            `Are you sure you want to delete user "${user.firstName} ${user.lastName}" (${user.email})?\n\n` +
+            `This action cannot be undone.`
+        );
+
+        if (!confirmDelete) return;
+
+        try {
+            const response = await fetch(`/api/admin/users/${userId}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                alert('User deleted successfully!');
+                loadUsers(); // Reload the list
+            } else {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `HTTP ${response.status}`);
+            }
+
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            alert('Failed to delete user: ' + error.message);
+        }
+    }
+</script>
+</body>
+</html>

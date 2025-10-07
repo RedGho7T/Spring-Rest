@@ -16,7 +16,6 @@ import java.util.Optional;
 public class RoleServiceImpl implements RoleService {
 
     private static final Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
-
     private final RoleDao roleDao;
 
     @Autowired

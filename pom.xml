@@ -8,7 +8,7 @@
         <version>2.6.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>ru.kata</groupId>
+    <groupId>ru.redgho7t</groupId>
     <artifactId>spring-rest</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>spring-boot_security-rest</name>

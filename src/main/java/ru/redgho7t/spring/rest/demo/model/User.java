@@ -1,10 +1,12 @@
 package ru.redgho7t.spring.rest.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -22,9 +24,6 @@ public class User implements UserDetails {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
     @Column(name = "age")
     private int age;
 
@@ -34,25 +33,20 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles;
+    @JsonManagedReference
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
-    }
-
-    public User(String name, int age, String email, String password) {
-        String[] nameParts = name.split(" ", 2);
-        this.firstName = nameParts[0];
-        this.lastName = nameParts.length > 1 ? nameParts[1] : nameParts[0];
-        this.name = name;
-        this.age = age;
-        this.email = email;
-        this.password = password;
+        this.roles = new HashSet<>();
     }
 
     public User(String firstName, String lastName, int age, String email, String password) {
@@ -61,101 +55,36 @@ public class User implements UserDetails {
         this.age = age;
         this.email = email;
         this.password = password;
-        updateFullName();
+        this.roles = new HashSet<>();
+
+        this.name = (firstName != null ? firstName : "") + " " + (lastName != null ? lastName : "");
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-        updateFullName();
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-        updateFullName();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-        if (firstName == null || lastName == null) {
-            String[] nameParts = name.split(" ", 2);
-            if (firstName == null) {
-                this.firstName = nameParts[0];
-            }
-            if (lastName == null) {
-                this.lastName = nameParts.length > 1 ? nameParts[1] : nameParts[0];
-            }
-        }
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public void updateFullName() {
-        if (firstName != null && lastName != null) {
-            this.name = firstName + " " + lastName;
-        }
-    }
 
     public String getFullName() {
-        if (firstName != null && lastName != null) {
-            return firstName + " " + lastName;
+        if (firstName == null && lastName == null) {
+            return email; //
         }
-        return name != null ? name : "";
+        return (firstName != null ? firstName : "") + " " + (lastName != null ? lastName : "");
+    }
+
+    public boolean isAdmin() {
+        return roles.stream().anyMatch(role -> "ROLE_ADMIN".equals(role.getName()));
+    }
+
+    public void addRole(Role role) {
+        if (role != null) {
+            this.roles.add(role);
+        }
+    }
+
+    public void removeRole(Role role) {
+        this.roles.remove(role);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles; // Роли реализуют GrantedAuthority
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
+        return roles;
     }
 
     @Override
@@ -183,17 +112,93 @@ public class User implements UserDetails {
         return true;
     }
 
-    @PrePersist
-    @PreUpdate
-    public void prePersistOrUpdate() {
-        updateFullName();
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles != null ? roles : new HashSet<>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return email != null && email.equals(user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return email != null ? email.hashCode() : 0;
     }
 
     @Override
     public String toString() {
-        return "User{id=" + id +
-                ", firstName='" + firstName + "'" +
-                ", lastName='" + lastName + "'" +
-                ", email='" + email + "'}";
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", email='" + email + '\'' +
+                ", roles=" + (roles != null ? roles.size() : 0) + " roles" +
+                '}';
     }
 }

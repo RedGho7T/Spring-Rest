@@ -13,6 +13,7 @@ import ru.redgho7t.spring.rest.demo.model.Role;
 import ru.redgho7t.spring.rest.demo.model.User;
 import ru.redgho7t.spring.rest.demo.service.PasswordService;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -25,12 +26,16 @@ public class DataInitializer implements CommandLineRunner {
     private final RoleDao roleDao;
     private final PasswordService passwordService;
 
+    private static final String DEFAULT_ADMIN_PASSWORD = "admin";
+    private static final String DEFAULT_USER_PASSWORD = "user";
+    private static final String DEFAULT_TEST_PASSWORD = "test";
+
     @Autowired
     public DataInitializer(UserDao userDao, RoleDao roleDao, @Lazy PasswordService passwordService) {
         this.userDao = userDao;
         this.roleDao = roleDao;
         this.passwordService = passwordService;
-        logger.info("DataInitializer initialized with PasswordService");
+        logger.info("DataInitializer initialized");
     }
 
     @Override
@@ -38,41 +43,55 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
         logger.info("Starting data initialization");
 
-        if (!passwordService.isPasswordCacheInitialized()) {
-            logger.error("Password cache is not ready");
-            throw new IllegalStateException("Password cache not initialized");
+        try {
+            Role adminRole = createRoleIfNotExists("ROLE_ADMIN");
+            Role userRole = createRoleIfNotExists("ROLE_USER");
+
+            createUserIfNotExists(
+                    "Admin", "Administrator", 30, "admin@admin.com",
+                    DEFAULT_ADMIN_PASSWORD, adminRole
+            );
+
+            createUserIfNotExists(
+                    "Regular", "User", 25, "user@user.com",
+                    DEFAULT_USER_PASSWORD, userRole
+            );
+
+            createUserIfNotExists(
+                    "Test", "User", 28, "test@test.com",
+                    DEFAULT_TEST_PASSWORD, userRole
+            );
+
+            logger.info("Data initialization completed successfully");
+
+        } catch (Exception e) {
+            logger.error("Error during data initialization", e);
+            throw new RuntimeException("Failed to initialize data", e);
         }
-        logger.info("Password cache ready: {} entries", passwordService.getCachedPasswordCount());
+    }
 
-
-        Role adminRole = createRoleIfNotExists("ROLE_ADMIN");
-        Role userRole = createRoleIfNotExists("ROLE_USER");
-
-
-        if (!userDao.existsByEmail("admin@admin.com")) {
-            String adminPass = passwordService.getEncodedAdminPassword();
-            User admin = new User("Администратор", 30, "admin@admin.com", adminPass);
-            admin.setRoles(Set.of(adminRole));
-            userDao.save(admin);
-            logger.info("Created admin with cached password");
+    private void createUserIfNotExists(String firstName, String lastName, int age,
+                                       String email, String rawPassword, Role role) {
+        if (userDao.existsByEmail(email)) {
+            logger.debug("User with email {} already exists", email);
+            return;
         }
 
+        try {
+            String encodedPassword = passwordService.encode(rawPassword);
 
-        if (!userDao.existsByEmail("user@user.com")) {
-            String userPass = passwordService.getEncodedUserPassword();
-            User user = new User("Обычный пользователь", 25, "user@user.com", userPass);
-            user.setRoles(Set.of(userRole));
+            User user = new User(firstName, lastName, age, email, encodedPassword);
+
+            Set<Role> roles = new HashSet<>();
+            roles.add(role);
+            user.setRoles(roles);
+
             userDao.save(user);
-            logger.info("Created user with cached password");
-        }
+            logger.info("Created user: {} with email: {}", user.getFullName(), email);
 
-
-        if (!userDao.existsByEmail("test@test.com")) {
-            String testPass = passwordService.getEncodedTestPassword();
-            User test = new User("Тестовый пользователь", 28, "test@test.com", testPass);
-            test.setRoles(Set.of(userRole));
-            userDao.save(test);
-            logger.info("Created test user with cached password");
+        } catch (Exception e) {
+            logger.error("Failed to create user with email: {}", email, e);
+            throw new RuntimeException("Failed to create user: " + email, e);
         }
     }
 
@@ -83,9 +102,15 @@ public class DataInitializer implements CommandLineRunner {
             return existing.get();
         }
 
-        Role role = new Role(roleName);
-        roleDao.save(role);
-        logger.info("Created role: {}", roleName);
-        return role;
+        try {
+            Role role = new Role(roleName);
+            roleDao.save(role);
+            logger.info("Created role: {}", roleName);
+            return role;
+
+        } catch (Exception e) {
+            logger.error("Failed to create role: {}", roleName, e);
+            throw new RuntimeException("Failed to create role: " + roleName, e);
+        }
     }
 }

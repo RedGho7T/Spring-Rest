@@ -2,17 +2,11 @@ package ru.redgho7t.spring.rest.demo.service;
 
 public interface PasswordService {
 
-    String encodePassword(String rawPassword);
+    String encode(String rawPassword);
 
     boolean matches(String rawPassword, String encodedPassword);
 
-    String getEncodedAdminPassword();
+    boolean isValidPassword(String password);
 
-    String getEncodedUserPassword();
-
-    String getEncodedTestPassword();
-
-    boolean isPasswordCacheInitialized();
-
-    int getCachedPasswordCount();
+    String generateTemporaryPassword();
 }

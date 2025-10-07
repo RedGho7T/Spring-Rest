@@ -8,6 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.redgho7t.spring.rest.demo.dao.UserDao;
 import ru.redgho7t.spring.rest.demo.model.Role;
 import ru.redgho7t.spring.rest.demo.model.User;
+import ru.redgho7t.spring.rest.demo.service.PasswordService;
+import ru.redgho7t.spring.rest.demo.service.RoleService;
+import ru.redgho7t.spring.rest.demo.service.UserService;
 
 import java.util.HashSet;
 import java.util.List;
@@ -25,45 +28,50 @@ public class UserServiceImpl implements UserService {
     private final PasswordService passwordService;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, RoleService roleService, PasswordService passwordService) {
+    public UserServiceImpl(UserDao userDao,
+                           RoleService roleService,
+                           PasswordService passwordService) {
         this.userDao = userDao;
         this.roleService = roleService;
         this.passwordService = passwordService;
-        logger.info("UserService initialized with PasswordService (no circular dependencies)");
+        logger.info("UserService initialized");
     }
 
     @Override
     public List<User> getAllUsers() {
-        logger.debug("Fetching all users from database");
+        logger.debug("Fetching all users");
         return userDao.findAll();
     }
 
     @Override
     public Optional<User> getUserById(Long id) {
-        logger.debug("Searching for user by ID: {}", id);
+        logger.debug("Fetch user by ID: {}", id);
         return userDao.findById(id);
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        logger.debug("Searching for user by email: {}", email);
+    public Optional<User> getUserByEmail(String email) {
+        logger.debug("Fetch user by email: {}", email);
         return userDao.findByEmail(email);
     }
 
     @Override
     public boolean existsByEmail(String email) {
-        logger.debug("Checking if email exists: {}", email);
+        logger.debug("Check exists email: {}", email);
         return userDao.existsByEmail(email);
     }
 
     @Override
-    public User createUser(String firstName, String lastName, int age,
-                           String email, String rawPassword, Set<Long> roleIds) {
-        logger.info("Creating new user: {}", email);
+    public User createUser(String firstName,
+                           String lastName,
+                           Integer age,
+                           String email,
+                           String rawPassword,
+                           Set<Long> roleIds) {
+        logger.info("Create user: {}", email);
 
         if (existsByEmail(email)) {
-            logger.warn("Attempt to create user with existing email: {}", email);
-            throw new IllegalArgumentException("User with this email already exists");
+            throw new IllegalArgumentException("Email already in use");
         }
 
         validateUserData(firstName, lastName, age, email, rawPassword);
@@ -73,112 +81,125 @@ public class UserServiceImpl implements UserService {
         user.setLastName(lastName);
         user.setAge(age);
         user.setEmail(email);
+        user.setPassword(passwordService.encode(rawPassword));
 
-        String encodedPassword = passwordService.encodePassword(rawPassword);
-        user.setPassword(encodedPassword);
-        logger.debug("Password encrypted via PasswordService for user: {}", email);
+        String fullName = generateFullName(firstName, lastName);
+        user.setName(fullName);
+        logger.debug("Generated name for user {}: '{}'", email, fullName);
 
-        Set<Role> roles = resolveRoles(roleIds);
-        user.setRoles(roles);
+        user.setRoles(resolveRoles(roleIds));
 
         userDao.save(user);
-        logger.info("User {} successfully created with {} roles", email, roles.size());
-
         return user;
     }
 
     @Override
-    public User updateUser(Long id, String firstName, String lastName,
-                           int age, String email, String rawPassword, Set<Long> roleIds) {
-        logger.info("Updating user with ID: {}", id);
+    public User updateUser(Long id,
+                           String firstName,
+                           String lastName,
+                           Integer age,
+                           String email,
+                           String rawPassword,
+                           Set<Long> roleIds) {
+        logger.info("Update user: {}", id);
 
-        Optional<User> userOptional = getUserById(id);
-        if (userOptional.isEmpty()) {
-            logger.error("User with ID {} not found for update", id);
-            throw new IllegalArgumentException("User not found");
+        User user = getUserById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        if (!user.getEmail().equals(email) && existsByEmail(email)) {
+            throw new IllegalArgumentException("Email already in use");
         }
 
-        User existingUser = userOptional.get();
-        String oldEmail = existingUser.getEmail();
+        validateUserData(firstName, lastName, age, email, rawPassword);
 
-        if (!oldEmail.equals(email) && existsByEmail(email)) {
-            logger.warn("Attempt to change email to existing one: {}", email);
-            throw new IllegalArgumentException("User with this email already exists");
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setAge(age);
+        user.setEmail(email);
+
+        user.setName((firstName != null ? firstName : "") + " " + (lastName != null ? lastName : ""));
+
+        String fullName = generateFullName(firstName, lastName);
+        user.setName(fullName);
+        logger.debug("Updated name for user {}: '{}'", email, fullName);
+
+        if (rawPassword != null && !rawPassword.isBlank()) {
+            user.setPassword(passwordService.encode(rawPassword));
         }
 
-        validateUserData(firstName, lastName, age, email, null);
+        user.setRoles(resolveRoles(roleIds));
 
-        existingUser.setFirstName(firstName);
-        existingUser.setLastName(lastName);
-        existingUser.setAge(age);
-        existingUser.setEmail(email);
-
-        if (rawPassword != null && !rawPassword.trim().isEmpty()) {
-            String encodedPassword = passwordService.encodePassword(rawPassword);
-            existingUser.setPassword(encodedPassword);
-            logger.debug("Password updated via PasswordService for user: {}", email);
-        } else {
-            logger.debug("Password not changed for user: {}", email);
-        }
-
-        Set<Role> roles = resolveRoles(roleIds);
-        existingUser.setRoles(roles);
-
-        userDao.update(existingUser);
-        logger.info("User {} successfully updated", email);
-
-        return existingUser;
+        userDao.update(user);
+        return user;
     }
 
     @Override
-    public User registerNewUser(String name, int age, String email, String rawPassword) {
-        logger.info("Registering new user: {}", email);
+    public User registerUser(String firstName,
+                             String lastName,
+                             Integer age,
+                             String email,
+                             String rawPassword) {
+        logger.info("Register user: {}", email);
 
         Role userRole = roleService.getRoleByName("ROLE_USER");
-        if (userRole == null) {
-            logger.error("ROLE_USER not found in system");
-            throw new IllegalStateException("User role not found");
-        }
+        Set<Long> roleIds = Set.of(userRole.getId());
 
-        Set<Long> userRoleIds = Set.of(userRole.getId());
-
-        String[] nameParts = name.trim().split("\\s+", 2);
-        String firstName = nameParts[0];
-        String lastName = nameParts.length > 1 ? nameParts[1] : firstName;
-
-        return createUser(firstName, lastName, age, email, rawPassword, userRoleIds);
+        return createUser(firstName, lastName, age, email, rawPassword, roleIds);
     }
 
     @Override
     public void deleteUser(Long id) {
-        logger.info("Deleting user with ID: {}", id);
+        logger.info("Delete user: {}", id);
 
-        Optional<User> userOptional = getUserById(id);
-        if (userOptional.isEmpty()) {
-            logger.warn("Attempt to delete non-existing user with ID: {}", id);
+        if (getUserById(id).isEmpty()) {
             throw new IllegalArgumentException("User not found");
         }
 
-        User user = userOptional.get();
         userDao.deleteById(id);
-        logger.info("User {} successfully deleted", user.getEmail());
     }
 
-    private void validateUserData(String firstName, String lastName, int age, String email, String password) {
-        if (firstName == null || firstName.trim().isEmpty()) {
-            throw new IllegalArgumentException("First name cannot be empty");
+    private String generateFullName(String firstName, String lastName) {
+        if (firstName == null && lastName == null) {
+            return "Unknown User";
         }
-        if (lastName == null || lastName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Last name cannot be empty");
+
+        String first = firstName != null ? firstName.trim() : "";
+        String last = lastName != null ? lastName.trim() : "";
+
+        if (first.isEmpty() && last.isEmpty()) {
+            return "Unknown User";
         }
-        if (age < 1 || age > 150) {
-            throw new IllegalArgumentException("Age must be between 1 and 150");
+
+        if (first.isEmpty()) {
+            return last;
         }
-        if (email == null || email.trim().isEmpty() || !email.contains("@")) {
-            throw new IllegalArgumentException("Valid email is required");
+
+        if (last.isEmpty()) {
+            return first;
         }
-        if (password != null && password.length() < 4) {
-            throw new IllegalArgumentException("Password must be at least 4 characters");
+
+        return first + " " + last;
+    }
+
+    private void validateUserData(String firstName,
+                                  String lastName,
+                                  Integer age,
+                                  String email,
+                                  String password) {
+        if (firstName == null || firstName.isBlank()) {
+            throw new IllegalArgumentException("First name required");
+        }
+        if (lastName == null || lastName.isBlank()) {
+            throw new IllegalArgumentException("Last name required");
+        }
+        if (age == null || age < 1 || age > 150) {
+            throw new IllegalArgumentException("Invalid age");
+        }
+        if (email == null || email.isBlank() || !email.contains("@")) {
+            throw new IllegalArgumentException("Invalid email");
+        }
+        if (password != null && password.length() < 3) {
+            throw new IllegalArgumentException("Password too short");
         }
     }
 
@@ -186,26 +207,18 @@ public class UserServiceImpl implements UserService {
         Set<Role> roles = new HashSet<>();
 
         if (roleIds == null || roleIds.isEmpty()) {
-            Role defaultRole = roleService.getRoleByName("ROLE_USER");
-            if (defaultRole != null) {
-                roles.add(defaultRole);
-                logger.debug("Assigned default role: ROLE_USER");
-            }
+            roles.add(roleService.getRoleByName("ROLE_USER"));
         } else {
-            for (Long roleId : roleIds) {
-                Role role = roleService.getRoleById(roleId);
-                if (role != null) {
-                    roles.add(role);
-                    logger.debug("Added role: {}", role.getName());
-                } else {
-                    logger.warn("Role with ID {} not found", roleId);
+            for (Long rid : roleIds) {
+                Role r = roleService.getRoleById(rid);
+                if (r != null) {
+                    roles.add(r);
                 }
             }
         }
 
         if (roles.isEmpty()) {
-            logger.error("Failed to assign any roles to user");
-            throw new IllegalStateException("User must have at least one role");
+            throw new IllegalStateException("User must have roles");
         }
 
         return roles;

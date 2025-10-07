@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Page Not Found</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-light: #3b82f6;
+            --secondary-color: #f8faff;
+            --accent-color: #1e40af;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            --shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+        }
+
+        body {
+            background: var(--secondary-color);
+            min-height: 100vh;
+            padding: 40px 0;
+            display: flex;
+            align-items: center;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-box {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .error-icon {
+            font-size: 80px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .error-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+
+        .error-message {
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .btn-custom {
+            background: var(--gradient);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary-custom {
+            background: #6b7280;
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary-custom:hover {
+            background: #4b5563;
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="form-container">
+        <div class="form-box">
+            <div class="error-icon">❌</div>
+            <h1 class="error-title">404 - Page Not Found</h1>
+            <p class="error-message">
+                Sorry, the page you're looking for doesn't exist or you don't have permission to access it.
+                <br>
+                Let's get you back to where you need to be!
+            </p>
+
+            <div class="mt-4">
+                <button class="btn btn-custom" onclick="goToHome()">🏠 Go Home</button>
+                <button class="btn btn-secondary-custom" onclick="goBack()">⬅️ Go Back</button>
+            </div>
+
+            <div class="mt-3">
+                <small class="text-muted">
+                    If you believe this is an error, please contact support.
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    console.log('🔍 404 PAGE: Page loaded');
+
+    async function goToHome() {
+        console.log('🔍 404 PAGE: Going to appropriate home page...');
+
+        try {
+            // Check if user is logged in
+            const response = await fetch('/api/auth/status', {
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                const userData = await response.json();
+                console.log('🔍 404 PAGE: User is authenticated:', userData.email);
+
+                // Redirect based on user role
+                const isAdmin = userData.roles && userData.roles.some(r => r.name === 'ROLE_ADMIN');
+                if (isAdmin) {
+                    console.log('🔍 404 PAGE: Redirecting admin to admin panel');
+                    window.location.href = '/admin/list.html';
+                } else {
+                    console.log('🔍 404 PAGE: Redirecting user to profile');
+                    window.location.href = '/user/user.html';
+                }
+            } else {
+                console.log('🔍 404 PAGE: User not authenticated, redirecting to login');
+                window.location.href = '/login.html';
+            }
+        } catch (error) {
+            console.error('🔍 404 PAGE: Error checking auth status:', error);
+            // Default to login page if there's an error
+            window.location.href = '/login.html';
+        }
+    }
+
+    function goBack() {
+        console.log('🔍 404 PAGE: Going back in history');
+
+        // Check if there's history to go back to
+        if (window.history.length > 1) {
+            window.history.back();
+        } else {
+            // No history, go to home instead
+            goToHome();
+        }
+    }
+
+    // Auto-redirect after 10 seconds
+    setTimeout(() => {
+        console.log('🔍 404 PAGE: Auto-redirecting after 10 seconds...');
+        goToHome();
+    }, 10000);
+</script>
+</body>
+</html>

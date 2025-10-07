@@ -18,19 +18,19 @@ public class RoleDaoImpl implements RoleDao {
     private static final Logger logger = LoggerFactory.getLogger(RoleDaoImpl.class);
 
     @PersistenceContext
-    private EntityManager em;
+    private EntityManager entityManager;
 
     @Override
     public List<Role> findAll() {
         logger.debug("Fetching all roles");
-        TypedQuery<Role> query = em.createQuery("SELECT r FROM Role r", Role.class);
+        TypedQuery<Role> query = entityManager.createQuery("SELECT r FROM Role r", Role.class);
         return query.getResultList();
     }
 
     @Override
     public Optional<Role> findById(Long id) {
         logger.debug("Searching role by ID: {}", id);
-        Role role = em.find(Role.class, id);
+        Role role = entityManager.find(Role.class, id);
         return Optional.ofNullable(role);
     }
 
@@ -38,7 +38,7 @@ public class RoleDaoImpl implements RoleDao {
     public Optional<Role> findByName(String name) {
         logger.debug("Searching role by name: {}", name);
         try {
-            TypedQuery<Role> query = em.createQuery("SELECT r FROM Role r WHERE r.name = :name", Role.class);
+            TypedQuery<Role> query = entityManager.createQuery("SELECT r FROM Role r WHERE r.name = :name", Role.class);
             query.setParameter("name", name);
             Role role = query.getSingleResult();
             return Optional.of(role);
@@ -52,10 +52,10 @@ public class RoleDaoImpl implements RoleDao {
     public void save(Role role) {
         logger.debug("Saving role: {}", role.getName());
         if (role.getId() == null) {
-            em.persist(role);
+            entityManager.persist(role);
             logger.debug("Role created: {}", role.getName());
         } else {
-            em.merge(role);
+            entityManager.merge(role);
             logger.debug("Role updated: {}", role.getName());
         }
     }
@@ -63,9 +63,9 @@ public class RoleDaoImpl implements RoleDao {
     @Override
     public void deleteById(Long id) {
         logger.debug("Deleting role with ID: {}", id);
-        Role role = em.find(Role.class, id);
+        Role role = entityManager.find(Role.class, id);
         if (role != null) {
-            em.remove(role);
+            entityManager.remove(role);
             logger.debug("Role deleted: {}", role.getName());
         } else {
             logger.warn("Role with ID {} not found for deletion", id);
