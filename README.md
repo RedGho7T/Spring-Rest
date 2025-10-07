@@ -1,4 +1,4 @@
-# Spring-Bootstrap
+# Spring-Rest
 
 Test admin:  admin@admin.com / admin
 
